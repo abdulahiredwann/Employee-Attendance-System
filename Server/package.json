@@ -5,8 +5,10 @@
     "@types/mysql": "^2.15.26",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "joi": "^17.13.3",
     "mysql": "^2.18.1",
-    "mysql2": "^3.11.0"
+    "mysql2": "^3.11.0",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "prisma": "^5.18.0"

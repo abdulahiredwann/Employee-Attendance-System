@@ -19,18 +19,24 @@ model Employee {
   lastName    String
   email       String       @unique
   password    String
-  qrCode      String
+  qrCode      String       @db.Text
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   attendances Attendance[]
 }
 
+enum AttendanceStatus {
+  PRESENT
+  LATE
+}
+
 model Attendance {
-  id         Int      @id @default(autoincrement())
+  id         Int              @id @default(autoincrement())
   employeeId Int
-  timestamp  DateTime @default(now())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  status     AttendanceStatus
+  timestamp  DateTime         @default(now())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
 
   employee Employee @relation(fields: [employeeId], references: [id])
 }

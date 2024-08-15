@@ -9,6 +9,7 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { auth, admin } = require("../Middleware/Admin");
+const authMiddleware = require("../Middleware/Employee");
 
 const qrcodeDir = path.join(__dirname, "../qrcode");
 if (!fs.existsSync(qrcodeDir)) {
@@ -17,7 +18,7 @@ if (!fs.existsSync(qrcodeDir)) {
 
 const prisma = new PrismaClient();
 
-// Register Employee
+// Register Employee for admin
 router.post("/", [auth, admin], async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
@@ -64,8 +65,8 @@ router.post("/", [auth, admin], async (req, res) => {
   }
 });
 
-// Get QR code
-router.get("/qrcode/:employeeId", async (req, res) => {
+// Get QR code for there employee
+router.get("/qrcode/:employeeId", authMiddleware, async (req, res) => {
   try {
     const { employeeId } = req.params;
     const employee = await prisma.employee.findUnique({

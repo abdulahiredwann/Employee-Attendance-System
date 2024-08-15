@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const { auth, admin } = require("../Middleware/Admin");
+const authMiddleware = require("../Middleware/Employee");
 
 const prisma = new PrismaClient();
 // Create Attendance record
@@ -58,7 +59,7 @@ router.post("/", [auth, admin], async (req, res) => {
 });
 
 // Get attendance
-router.get("/:employeeId", async (req, res) => {
+router.get("/:employeeId", authMiddleware, async (req, res) => {
   try {
     const { employeeId } = req.params;
     const attendanceRecords = await prisma.attendance.findMany({

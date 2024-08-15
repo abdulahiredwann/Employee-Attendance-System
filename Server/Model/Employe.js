@@ -12,7 +12,16 @@ function validateEmployee(employee) {
 
   return schema.validate(employee);
 }
+function validateLogin(employee) {
+  const schema = Joi.object({
+    email: Joi.string().email().min(2).max(100).required(),
+    password: Joi.string().min(6).max(100).required(),
+  });
+
+  return schema.validate(employee);
+}
 
 module.exports = {
   validateEmployee,
+  validateLogin,
 };

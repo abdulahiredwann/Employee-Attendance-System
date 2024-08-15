@@ -5,6 +5,8 @@ const { PrismaClient } = require("@prisma/client");
 const QRCode = require("qrcode");
 const fs = require("fs");
 const path = require("path");
+const _ = require("lodash");
+const bcrypt = require("bcrypt");
 
 const qrcodeDir = path.join(__dirname, "../qrcode");
 if (!fs.existsSync(qrcodeDir)) {
@@ -21,6 +23,14 @@ router.post("/", async (req, res) => {
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
+    const checkEmail = await prisma.employee.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (checkEmail) {
+      return res.status(400).send("email Alredy registerd!");
+    }
 
     // Generate QR code data
     const qrCodeData = `Employee:${email}-${firstName}-${lastName}-${Date.now()}`;
@@ -34,23 +44,25 @@ router.post("/", async (req, res) => {
       margin: 2,
     });
 
+    const hashedPassword = await bcrypt.hash(password, 10);
     // Save the file path to the database
     const newEmployee = await prisma.employee.create({
       data: {
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
         qrCode: `/qrcode/${email}.png`,
       },
     });
-    res.status(201).send(newEmployee);
+    res.status(201).send(_.omit(newEmployee, ["password"]));
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");
   }
 });
 
+// Get QR code
 router.get("/qrcode/:employeeId", async (req, res) => {
   try {
     const { employeeId } = req.params;

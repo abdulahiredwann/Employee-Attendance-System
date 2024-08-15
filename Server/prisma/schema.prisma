@@ -28,6 +28,7 @@ model Employee {
 enum AttendanceStatus {
   PRESENT
   LATE
+  ABSENT
 }
 
 model Attendance {
@@ -39,4 +40,12 @@ model Attendance {
   updatedAt  DateTime         @updatedAt
 
   employee Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Admin {
+  id        Int    @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String @unique
+  password  String
 }

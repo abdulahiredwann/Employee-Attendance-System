@@ -3,6 +3,8 @@ const app = express();
 const mysql = require("mysql2");
 const cors = require("cors");
 const employee = require("./router/Employee");
+const attendance = require("./router/Attendance");
+const admin = require("./router/Admin");
 app.use(cors());
 app.use(express.json());
 const path = require("path"); // Import the path module
@@ -24,7 +26,11 @@ connection.connect((err) => {
 });
 
 app.use("/api/employee", employee);
+app.use("/api/attendance", attendance);
+app.use("/api/admin", admin);
 
 app.listen(3000, () => {
   console.log("Servier Listening 3000");
 });
+
+// require("./scheduled");

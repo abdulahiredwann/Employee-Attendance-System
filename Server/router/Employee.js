@@ -106,17 +106,17 @@ router.post("/login", async (req, res) => {
   }
   const employe = await prisma.employee.findUnique({ where: { email } });
   if (!employe) {
-    return res.status(404).send("email or password is not valid");
+    return res.status(400).send("email or password is not valid");
   }
   const validatePassword = await bcrypt.compare(password, employe.password);
   if (!validatePassword) {
-    return res.status(404).send("email or password is not valid");
+    return res.status(400).send("email or password is not valid");
   }
   const token = jwt.sign(
     { id: employe.id, email: employe.email },
     process.env.JWT_SECRET
   );
-  res.status(200).json({ token });
+  res.status(200).send({ token, id: employe.id });
 });
 
 module.exports = router;

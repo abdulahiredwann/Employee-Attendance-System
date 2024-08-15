@@ -8,6 +8,7 @@ const path = require("path");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { auth, admin } = require("../Middleware/Admin");
 
 const qrcodeDir = path.join(__dirname, "../qrcode");
 if (!fs.existsSync(qrcodeDir)) {
@@ -17,7 +18,7 @@ if (!fs.existsSync(qrcodeDir)) {
 const prisma = new PrismaClient();
 
 // Register Employee
-router.post("/", async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
     const { error } = validateEmployee(req.body);

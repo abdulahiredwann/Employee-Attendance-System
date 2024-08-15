@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
+const { auth, admin } = require("../Middleware/Admin");
 
 const prisma = new PrismaClient();
 // Create Attendance record
-router.post("/", async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   try {
     const { employeeId } = req.body;
 

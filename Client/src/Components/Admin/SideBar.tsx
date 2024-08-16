@@ -6,11 +6,12 @@ import { LiaSignOutAltSolid } from "react-icons/lia";
 import { LuQrCode } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import AttendanceComponent from "./AttendanceComponent";
-import AnalyticsComponent from "./AttendanceComponent"; // Correct import for AnalyticsComponent
+import AnalyticsComponent from "./Analytics"; // Correct import for AnalyticsComponent
 import { useAuth } from "../../Services/Auth";
 import api from "../../Services/api";
 import avater from "../../../public/profile.png";
 import logo from "../../../public/ABD tech company logo.png";
+import { useNavigate } from "react-router-dom";
 
 type ActiveComponent = "dashboard" | "attendance" | "analytics" | "welcome";
 interface User {
@@ -22,6 +23,7 @@ interface User {
 function SideBar() {
   const [activeComponent, setActiveComponent] =
     useState<ActiveComponent>("welcome");
+  const navigate = useNavigate();
 
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [user, setUser] = useState<User | null>(null);
@@ -61,9 +63,9 @@ function SideBar() {
   };
 
   return (
-    <div className="grid min-h-screen grid-cols-[280px_1fr] bg-base-200">
+    <div className="grid min-h-screen grid-cols-[280px_1fr] ">
       {/* Sidebar */}
-      <div className="flex flex-col justify-between gap-2 border-r bg-base-100 p-4">
+      <div className="flex flex-col justify-between gap-2 border-r bg-base-200 p-4 ">
         {/* Header and User Info */}
         <div>
           <div className="flex h-[40px] items-center justify-between border-b px-2">
@@ -100,7 +102,10 @@ function SideBar() {
             </button>
             <button
               className="btn btn-outline flex items-center gap-2"
-              onClick={() => handleButtonClick("analytics")}
+              onClick={() => {
+                handleButtonClick("analytics");
+                navigate("/admin/analytics");
+              }}
             >
               <IoAnalyticsOutline />
               Analytics

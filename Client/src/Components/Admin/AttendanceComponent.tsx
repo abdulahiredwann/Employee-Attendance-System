@@ -73,7 +73,7 @@ function AttendanceComponent() {
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-4 ">
       <Toaster></Toaster>
       {/* Left Column: QR Code Scanner */}
       <div className="">

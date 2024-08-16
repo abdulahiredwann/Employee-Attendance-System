@@ -59,7 +59,7 @@ router.post("/", [auth, admin], async (req, res) => {
 });
 
 // Get attendance
-router.get("/:employeeId", authMiddleware, async (req, res) => {
+router.get("emplyee/:employeeId", authMiddleware, async (req, res) => {
   try {
     const { employeeId } = req.params;
     const attendanceRecords = await prisma.attendance.findMany({
@@ -69,6 +69,34 @@ router.get("/:employeeId", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Error retrieving attendance records:", error);
     res.status(500).send("Server Error");
+  }
+});
+
+// Get all Employee Attendance
+router.get("/all", async (req, res) => {
+  try {
+    const all = await prisma.attendance.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        id: true,
+        employeeId: true,
+        status: true,
+        timestamp: true,
+        employee: {
+          select: {
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+      },
+    });
+    res.status(200).send(all);
+  } catch (error) {
+    res.status(500).send("Server Error");
+    console.log(error);
   }
 });
 

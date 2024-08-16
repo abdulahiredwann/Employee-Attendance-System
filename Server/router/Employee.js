@@ -35,18 +35,6 @@ router.post("/", [auth, admin], async (req, res) => {
       return res.status(400).send("email Alredy registerd!");
     }
 
-    // Generate QR code data
-    const qrCodeData = `Employee:${email}-${firstName}-${lastName}-${Date.now()}`;
-
-    // Define file path
-    const qrCodeFilePath = path.join(qrcodeDir, `${email}.png`);
-
-    // Generate QR code image and save it
-    await QRCode.toFile(qrCodeFilePath, qrCodeData, {
-      width: 300,
-      margin: 2,
-    });
-
     const hashedPassword = await bcrypt.hash(password, 10);
     // Save the file path to the database
     const newEmployee = await prisma.employee.create({
@@ -59,6 +47,20 @@ router.post("/", [auth, admin], async (req, res) => {
       },
     });
     res.status(201).send(_.omit(newEmployee, ["password"]));
+
+    // Generate QR code data
+    const qrCodeData = `Employee:${email}-${firstName}-${lastName}-${Date.now()}-${
+      newEmployee.id
+    }`;
+
+    // Define file path
+    const qrCodeFilePath = path.join(qrcodeDir, `${email}.png`);
+
+    // Generate QR code image and save it
+    await QRCode.toFile(qrCodeFilePath, qrCodeData, {
+      width: 300,
+      margin: 2,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");

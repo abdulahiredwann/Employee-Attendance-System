@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import AttendanceService from "../../Services/attendaceService";
 import toast, { Toaster } from "react-hot-toast";
-import { AxiosError } from "axios";
-import { any } from "zod";
 
 interface EmployeeInfo {
   name: string;
@@ -124,6 +122,3 @@ function AttendanceComponent() {
 }
 
 export default AttendanceComponent;
-function saveSettings(settings: any): Promise<unknown> {
-  throw new Error("Function not implemented.");
-}

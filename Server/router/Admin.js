@@ -5,6 +5,7 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const jwt = require("jsonwebtoken");
+const { auth } = require("../Middleware/Admin");
 
 const prisma = new PrismaClient();
 // Create Admin
@@ -57,6 +58,21 @@ router.post("/login", async (req, res) => {
     process.env.JWT_SECRET
   );
   res.status(200).send({ token });
+});
+
+// Get Admin Info
+router.get("/user", auth, async (req, res) => {
+  try {
+    const { id } = req.user;
+    let user = await prisma.admin.findUnique({ where: { id } });
+    if (!user) {
+      return res.status(400).send("User not found");
+    }
+    res.status(200).send(_.omit(user, ["password"]));
+  } catch (error) {
+    res.status(500).send("Server Error");
+    console.log(error);
+  }
 });
 function validateAdmin(admin) {
   const schema = Joi.object({

@@ -7,6 +7,7 @@ import AttendanceComponent from "./Components/Admin/AttendanceComponent";
 import AnalyticsComponent from "./Components/Admin/Analytics";
 import { AuthProvider } from "./Services/Auth";
 import ShowDetails from "./Components/Admin/ShowDetails";
+import Dashboard from "./Components/Admin/Dashboard/Dashboard";
 
 function App() {
   return (
@@ -40,7 +41,11 @@ function AppContent() {
                 <Routes>
                   <Route
                     path="dashboard"
-                    element={<div>Dashboard Content</div>}
+                    element={
+                      <div>
+                        <Dashboard></Dashboard>
+                      </div>
+                    }
                   />
                   <Route path="attendance" element={<AttendanceComponent />} />
                   <Route path="analytics" element={<AnalyticsComponent />} />

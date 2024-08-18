@@ -23,6 +23,9 @@ function Analytics() {
   const [filterStatus, setFilterStatus] = useState("");
   const [filterDate, setFilterDate] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Items per page
+
   useEffect(() => {
     const fetchAttendance = async () => {
       const response = await api.get("/attendance/all");
@@ -66,18 +69,30 @@ function Analytics() {
     }
 
     setFilteredData(filtered);
+    setCurrentPage(1); // Reset to first page on filter change
+  };
+
+  // Calculate paginated data
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
   };
 
   const statusStyles: { [key: string]: string } = {
     LATE: "text-yellow-600 font-semibold",
     ABSENT: "text-red-600 font-semibold",
-    PRESENT: "text-blue-700 font-semibold ",
+    PRESENT: "text-blue-700 font-semibold",
   };
 
   return (
     <div className="p-6 bg-base-100 min-h-screen">
-      <h1 className="text-3xl   font-semibold mb-6   flex items-center gap-2 justify-center  text-blue-900   ">
-        Analytics Attendance <IoAnalytics></IoAnalytics>
+      <h1 className="text-3xl font-semibold mb-6 flex items-center gap-2 justify-center text-blue-900">
+        Analytics Attendance <IoAnalytics />
       </h1>
 
       <div className="p-6">
@@ -132,7 +147,7 @@ function Analytics() {
       </div>
 
       <div className="overflow-x-auto shadow-lg rounded-lg shadow-slate-400">
-        <table className="table-auto w-full ">
+        <table className="table-auto w-full">
           <thead>
             <tr>
               <th className="px-4 py-3 text-left">#</th>
@@ -142,10 +157,10 @@ function Analytics() {
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
-              filteredData.map((data, index) => (
+            {currentItems.length > 0 ? (
+              currentItems.map((data, index) => (
                 <tr key={data.id} className="border-b">
-                  <td className="px-4 py-3">{index + 1}</td>
+                  <td className="px-4 py-3">{indexOfFirstItem + index + 1}</td>
                   <td className="px-4 py-3">
                     <a
                       href={`seedetails/${data.employee.id}`}
@@ -174,6 +189,21 @@ function Analytics() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="join flex justify-center mt-4">
+        {[...Array(totalPages)].map((_, i) => (
+          <button
+            key={i + 1}
+            className={`join-item btn ${
+              currentPage === i + 1 ? "btn-active" : ""
+            }`}
+            onClick={() => handlePageChange(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
       </div>
     </div>
   );

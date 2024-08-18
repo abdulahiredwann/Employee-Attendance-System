@@ -108,4 +108,27 @@ router.get("/all", async (req, res) => {
   }
 });
 
+// Get Monthly Report
+router.get("/monthly", async (req, res) => {
+  try {
+    const { month } = req.query;
+    const date = new Date(month);
+    const startOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    const endOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+    const report = await prisma.attendance.findMany({
+      where: {
+        timestamp: {
+          gte: startOfMonth,
+          lt: endOfMonth,
+        },
+      },
+    });
+
+    res.status(200).send(report);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

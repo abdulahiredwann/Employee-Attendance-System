@@ -3,6 +3,7 @@ import api from "../../Services/api";
 import { IoAnalytics } from "react-icons/io5";
 
 interface Employee {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -147,7 +148,7 @@ function Analytics() {
                   <td className="px-4 py-3">{index + 1}</td>
                   <td className="px-4 py-3">
                     <a
-                      href={`seedetails/${data.id}`}
+                      href={`seedetails/${data.employee.id}`}
                       className="hover:text-blue-500 tooltip tooltip-primary"
                       data-tip="Show Details"
                     >

@@ -98,6 +98,31 @@ router.get("/qrcode/:employeeId", authMiddleware, async (req, res) => {
   }
 });
 
+// Get emplye info
+router.get("/info/:id", async (req, res) => {
+  let { id } = req.params;
+  id = parseInt(id);
+
+  try {
+    const info = await prisma.employee.findUnique({
+      where: { id },
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+    if (!info) {
+      return res.status(400).send("Employee Not found");
+    }
+    res.status(200).send(info);
+  } catch (error) {
+    res.status(500).send("Server Error");
+    console.log(error);
+  }
+});
+
 // Login Employee
 router.post("/login", async (req, res) => {
   const { error } = validateLogin(req.body);

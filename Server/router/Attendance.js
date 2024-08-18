@@ -59,11 +59,18 @@ router.post("/", [auth, admin], async (req, res) => {
 });
 
 // Get attendance
-router.get("emplyee/:employeeId", authMiddleware, async (req, res) => {
+router.get("/get/:employeeId", async (req, res) => {
   try {
     const { employeeId } = req.params;
+    const { month, year } = req.query;
     const attendanceRecords = await prisma.attendance.findMany({
-      where: { employeeId: parseInt(employeeId) },
+      where: {
+        employeeId: parseInt(employeeId),
+        timestamp: {
+          gte: new Date(year, month - 1, 1),
+          lt: new Date(year, month, 1),
+        },
+      },
     });
     res.status(200).send(attendanceRecords);
   } catch (error) {
@@ -86,6 +93,7 @@ router.get("/all", async (req, res) => {
         timestamp: true,
         employee: {
           select: {
+            id: true,
             firstName: true,
             lastName: true,
             email: true,

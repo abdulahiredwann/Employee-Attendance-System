@@ -6,7 +6,7 @@ interface Response {
   status: "PRESENT" | "LATE" | "ABSENT";
 }
 
-function TodayReport() {
+function YesterdayReports() {
   const [attendanceData, setAttendanceData] = useState({
     present: 0,
     late: 0,
@@ -18,7 +18,7 @@ function TodayReport() {
   useEffect(() => {
     const todayReport = async () => {
       try {
-        const response = await api.get<Response[]>(`/attendance/today`);
+        const response = await api.get<Response[]>(`/attendance/yesterday`);
         const report = response.data;
 
         // Count the number of each status
@@ -47,7 +47,7 @@ function TodayReport() {
 
   return (
     <div className="card bg-base-100 w-96 shadow-xl shadow-orange-300 hover:scale-105 pb-16">
-      <h1 className="text-center text-lg">Today Reports</h1>
+      <h1 className="text-center text-lg">Yesterday Reports</h1>
       <PieChart
         series={[
           {
@@ -82,4 +82,4 @@ function TodayReport() {
   );
 }
 
-export default TodayReport;
+export default YesterdayReports;

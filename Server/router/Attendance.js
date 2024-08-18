@@ -152,4 +152,29 @@ router.get("/today", async (req, res) => {
   }
 });
 
+// Get Yesterday report
+router.get("/yesterday", async (req, res) => {
+  const date = new Date();
+
+  // Calculate the start and end of yesterday
+  const startOfDay = new Date(date.setDate(date.getDate() - 1));
+  startOfDay.setHours(0, 0, 0, 0); // Midnight of yesterday
+
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+
+  try {
+    const todayReport = await prisma.attendance.findMany({
+      where: {
+        timestamp: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+    });
+    res.status(200).send(todayReport);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

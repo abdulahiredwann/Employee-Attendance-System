@@ -13,31 +13,34 @@ interface EmployeeInfo {
 function AttendanceComponent() {
   const [employeeInfo, setEmployeeInfo] = useState<EmployeeInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isScanning, setIsScanning] = useState(true); // Track scanning state
+  const [isRequestPending, setIsRequestPending] = useState(false);
 
   useEffect(() => {
     const config = { fps: 10, qrbox: 250 };
     const qrCodeScanner = new Html5QrcodeScanner("qr-reader", config, false);
 
-    qrCodeScanner.render(handleScanSuccess, handleScanFailure);
+    if (isScanning) {
+      qrCodeScanner.render(handleScanSuccess, handleScanFailure);
+    }
 
     return () => {
-      // Clear the QR code scanner instance when the component is unmounted
       qrCodeScanner.clear().catch((error) => {
         console.error("Failed to clear QR Code scanner", error);
       });
     };
-  }, []);
+  }, [isScanning]);
 
   const handleScanSuccess = (decodedText: string) => {
+    if (isRequestPending) return;
+
+    setIsScanning(false); // Disable further scanning
+
     try {
-      // Extract and parse the QR code data
       const [prefix, data] = decodedText.split(":");
       if (prefix === "Employee" && data) {
         const [email, firstName, lastName, date, idString] = data.split("-");
-
-        // Convert the id to a number
         const id = Number(idString);
-
         if (isNaN(id)) {
           throw new Error("Invalid ID format in QR code.");
         }
@@ -50,42 +53,54 @@ function AttendanceComponent() {
         };
         setEmployeeInfo(employeeInfo);
         setError(null);
+
+        // Process the scan data and handle request
+        sendAttendance(employeeInfo);
       } else {
         throw new Error("Invalid QR code format");
       }
     } catch (err) {
       setError("Failed to parse QR code data.");
+      setIsScanning(true); // Re-enable scanning on error
     }
   };
 
   const handleScanFailure = (error: any) => {
     setError("Error scanning QR code: " + error?.message);
+    setIsScanning(true); // Re-enable scanning on failure
   };
 
-  const run = async (data: EmployeeInfo) => {
+  const sendAttendance = async (data: EmployeeInfo) => {
+    setIsRequestPending(true);
+
     try {
-      await AttendanceService(data);
-      toast.success("Saved in Attendance");
+      await AttendanceService(data); // Send request to server
+      toast.success("Attendance saved successfully!");
+      setIsRequestPending(false);
     } catch (error: any) {
-      console.log(error);
-      toast.error(error.response.data);
+      console.error("Error sending attendance request:", error);
+      toast.error(error.response?.data || "An error occurred");
+      setIsRequestPending(false);
+    } finally {
+      setIsRequestPending(false);
+      setTimeout(() => {
+        setIsScanning(true); // Re-enable scanning after delay
+      }, 5000); // 5 seconds delay before enabling scanning again
     }
   };
 
   return (
-    <div className="grid grid-cols-2 gap-4 ">
-      <Toaster></Toaster>
-      {/* Left Column: QR Code Scanner */}
-      <div className="">
+    <div className="grid grid-cols-2 gap-4">
+      <Toaster />
+      <div>
         <h2 className="text-lg font-semibold mb-4">Scan QR Code</h2>
-        <div id="qr-reader" className=""></div>
+        <div id="qr-reader"></div>
         <p className="text-gray-500">
           Place the QR code in front of the camera
         </p>
         {error && <p className="text-red-500">{error}</p>}
       </div>
 
-      {/* Right Column: Display Employee Info */}
       <div className="flex flex-col justify-center p-4 bg-white rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-4">Employee Information</h2>
         {employeeInfo ? (
@@ -100,21 +115,16 @@ function AttendanceComponent() {
               <strong>ID:</strong> {employeeInfo.id}
             </p>
             <p>
-              <strong>Key:</strong> {employeeInfo.date}
+              <strong>Date:</strong> {employeeInfo.date}
             </p>
-            <button
-              onClick={() => {
-                run(employeeInfo);
-              }}
-              className="  btn btn-primary"
-            >
-              Submit
-            </button>
           </div>
         ) : (
-          <>
-            <p className="text-gray-500">No employee scanned yet.</p>
-          </>
+          <p className="text-gray-500">No employee scanned yet.</p>
+        )}
+        {isRequestPending && (
+          <div className="mt-4 p-4 bg-gray-200 rounded-lg text-center">
+            <p>Processing, please wait...</p>
+          </div>
         )}
       </div>
     </div>

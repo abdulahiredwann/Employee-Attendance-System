@@ -1,4 +1,5 @@
 import MonthlyReports from "./MonthlyReports";
+import TodayReport from "./TodayReport";
 
 function Dashboard() {
   return (
@@ -10,7 +11,9 @@ function Dashboard() {
         <div className=" p-7 ">
           <MonthlyReports></MonthlyReports>
         </div>
-        <div className="bg-yellow-300 p-7 ">Today Report Data</div>
+        <div className="p-7 ">
+          <TodayReport></TodayReport>
+        </div>
         <div className="bg-red-500 p-7">Yesterdat Report Data</div>
         <div className="bg-blue-500 p-7">Warning Person</div>
       </div>

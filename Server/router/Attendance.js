@@ -131,4 +131,25 @@ router.get("/monthly", async (req, res) => {
   }
 });
 
+// Get Today Report
+router.get("/today", async (req, res) => {
+  const date = new Date();
+  const startOfDay = new Date(date.setHours(0, 0, 0, 0)); // Midnight of today
+  const endOfDay = new Date(date.setHours(23, 59, 59, 999)); // End of today
+
+  try {
+    const todayReport = await prisma.attendance.findMany({
+      where: {
+        timestamp: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+    });
+    res.status(200).send(todayReport);
+  } catch (error) {
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

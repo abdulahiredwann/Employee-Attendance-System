@@ -46,26 +46,26 @@ function TodayReport() {
   }, []);
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl shadow-orange-300 hover:scale-105">
-      <h1 className="text-center text-lg">Monthly Reports</h1>
+    <div className="card bg-base-100 w-96 shadow-xl shadow-orange-300 hover:scale-105 pb-16">
+      <h1 className="text-center text-lg">Today Reports</h1>
       <PieChart
         series={[
           {
             data: [
               {
                 id: 0,
-                value: 4,
-                label: `Present 1`,
+                value: attendanceData.present,
+                label: `Present ${attendanceData.present}`,
               },
               {
                 id: 1,
-                value: 5,
-                label: `Late `,
+                value: attendanceData.late,
+                label: `Late ${attendanceData.late} `,
               },
               {
                 id: 2,
-                value: 23,
-                label: `Absent `,
+                value: attendanceData.absent,
+                label: `Absent ${attendanceData.absent}`,
               },
             ],
             innerRadius: 30,

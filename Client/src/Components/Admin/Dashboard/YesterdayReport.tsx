@@ -46,8 +46,10 @@ function YesterdayReports() {
   }, []);
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl shadow-orange-300 hover:scale-105 pb-16">
-      <h1 className="text-center text-lg">Yesterday Reports</h1>
+    <div className="card bg-base-100 w-96 shadow-xl shadow-gray-400 hover:scale-105 pb-16">
+      <h1 className="text-center text-lg font-serif text-blue-600">
+        Yesterday Reports
+      </h1>
       <PieChart
         series={[
           {

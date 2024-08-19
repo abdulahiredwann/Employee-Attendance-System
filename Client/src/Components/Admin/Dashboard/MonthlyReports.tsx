@@ -85,8 +85,10 @@ function MonthlyReports() {
   };
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl shadow-orange-300 hover:scale-105">
-      <h1 className="text-center text-lg">Monthly Reports</h1>
+    <div className="card bg-base-100 w-96 shadow-xl shadow-gray-400 hover:scale-105">
+      <h1 className="text-center text-lg font-serif text-blue-600">
+        Monthly Reports
+      </h1>
       <PieChart
         series={[
           {

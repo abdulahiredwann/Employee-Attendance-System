@@ -177,4 +177,57 @@ router.get("/yesterday", async (req, res) => {
   }
 });
 
+// Get Warning Person
+router.get("/warning", async (req, res) => {
+  try {
+    // Fetch all attendance records
+    const attendanceRecords = await prisma.attendance.findMany();
+
+    // Organize attendance records by employeeId
+    const employeeAttendance = {};
+
+    attendanceRecords.forEach((record) => {
+      const { employeeId, status } = record;
+      if (!employeeAttendance[employeeId]) {
+        employeeAttendance[employeeId] = { late: 0, absent: 0 };
+      }
+      if (status === "LATE") {
+        employeeAttendance[employeeId].late += 1;
+      } else if (status === "ABSENT") {
+        employeeAttendance[employeeId].absent += 1;
+      }
+    });
+
+    // Filter employees with warnings and retrieve their information
+    const warningEmployees = await Promise.all(
+      Object.keys(employeeAttendance)
+        .filter((employeeId) => {
+          const { late, absent } = employeeAttendance[employeeId];
+          return late >= 1 || absent >= 1;
+        })
+        .map(async (employeeId) => {
+          // Fetch employee details
+          const employee = await prisma.employee.findUnique({
+            where: { id: parseInt(employeeId) },
+            select: { firstName: true, lastName: true, email: true },
+          });
+
+          return {
+            employeeId,
+            firstName: employee?.firstName,
+            lastName: employee?.lastName,
+            email: employee?.email,
+            ...employeeAttendance[employeeId],
+          };
+        })
+    );
+
+    // Send response with warning employees
+    res.status(200).json(warningEmployees);
+  } catch (error) {
+    res.status(500).send("Server error");
+    console.error("Error retrieving warning persons:", error);
+  }
+});
+
 module.exports = router;

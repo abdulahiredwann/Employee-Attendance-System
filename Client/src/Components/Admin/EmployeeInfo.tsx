@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../Services/api";
+import { CiCircleInfo } from "react-icons/ci";
 
 interface Employee {
   firstName: string;
@@ -37,16 +38,21 @@ function EmployeeInfo() {
       <div className="p-4">
         <div className="card bg-base-100 w-96 shadow-xl">
           <div className="p-9">
-            <h2 className=" text-xl font-bold mb-4">Employee Info:</h2>
+            <h2 className=" text-xl gap-2 font-extrabold mb-4 flex items-center">
+              <CiCircleInfo color="blue" size={25}></CiCircleInfo> Employee
+              Info:
+            </h2>
             <div className="flex items-center mb-2">
               <p className="text-lg font-bold text-gray-700 mr-2">Name:</p>
-              <p className="text-lg  text-gray-900">
+              <p className="text-lg font-mono  text-gray-900">
                 {emplyee?.firstName} {emplyee?.lastName}
               </p>
             </div>
             <div className="flex items-center mb-2">
               <p className="text-lg font-bold text-gray-700 mr-2">Email:</p>
-              <p className="text-lg text-gray-900">{emplyee?.email}</p>
+              <p className="text-lg font-extralight text-gray-900">
+                {emplyee?.email}
+              </p>
             </div>
             <div className="flex items-center">
               <p className="text-lg font-bold text-gray-700 mr-2">ID:</p>

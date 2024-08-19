@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../Services/api";
 import { IoAnalytics } from "react-icons/io5";
+import user from "../../../public/user.png";
 
 interface Employee {
   id: number;
@@ -164,9 +165,10 @@ function Analytics() {
                   <td className="px-4 py-3">
                     <a
                       href={`seedetails/${data.employee.id}`}
-                      className="hover:text-blue-500 tooltip tooltip-primary"
+                      className="hover:text-blue-500 tooltip tooltip-primary  flex items-center"
                       data-tip="Show Details"
                     >
+                      <img className="h-8 mr-2" src={user} alt="" />
                       {data.employee.firstName} {data.employee.lastName}
                     </a>
                   </td>

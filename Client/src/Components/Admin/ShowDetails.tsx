@@ -8,7 +8,7 @@ function ShowDetails() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold text-center my-4">See Details</h1>
+      <h1 className="text-3xl font-serif text-center my-4">See Details</h1>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <EmployeeInfo></EmployeeInfo>
         <div className=" p-4">{<DataAnalytics id={id!} />}</div>

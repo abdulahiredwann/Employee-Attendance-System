@@ -10,6 +10,7 @@ import api from "../../Services/api";
 import avater from "../../../public/profile.png";
 import logo from "../../../public/ABD tech company logo.png";
 import { useEffect, useState } from "react";
+import useValidateAdmin from "../../hooks/useValidateAdmin";
 
 interface User {
   firstName: string;
@@ -18,6 +19,7 @@ interface User {
 }
 
 function SideBar() {
+  useValidateAdmin();
   const navigate = useNavigate();
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const [user, setUser] = useState<User | null>(null);
@@ -38,6 +40,11 @@ function SideBar() {
     };
     fetchUser();
   }, [isAuthenticated, setIsAuthenticated]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("x-auth-token");
+    navigate("/loginadmin");
+  };
 
   return (
     <div className="fixed top-0 left-0 h-full w-72 flex flex-col justify-between border-r bg-base-200 p-4">
@@ -99,7 +106,10 @@ function SideBar() {
         <button className="btn btn-sm btn-outline border-none flex items-center gap-2">
           <BiSupport size={20} /> Support
         </button>
-        <button className="btn btn-sm btn-outline border-none flex items-center gap-2">
+        <button
+          onClick={handleLogout}
+          className="btn btn-sm btn-outline border-none flex items-center gap-2"
+        >
           <LiaSignOutAltSolid size={20} /> Signout
         </button>
       </div>

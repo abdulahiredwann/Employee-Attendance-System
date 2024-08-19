@@ -52,7 +52,7 @@ const AdminLogin: React.FC = () => {
       setLoading(true);
       await AdminLoginService(data);
 
-      navigate(`/admin`);
+      window.location.href = "/admin/dashboard";
     } catch (error: any) {
       setLoading(false);
       console.error("Login failed:", error); // Add this line

@@ -14,17 +14,17 @@ interface WarningPerson {
 }
 
 function WarningPerson() {
-  const [warningPerson, setWarningPeroson] = useState<WarningPerson[]>([]);
+  const [warningPerson, setWarningPerson] = useState<WarningPerson[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWarningPerson = async () => {
       const response = await api.get("/attendance/warning");
-      setWarningPeroson(response.data);
+      setWarningPerson(response.data);
     };
     fetchWarningPerson();
   }, []);
-  console.log(warningPerson);
+
   return (
     <>
       <div className="card bg-base-100 w-96 shadow-xl shadow-gray-400 hover:scale-105">
@@ -41,13 +41,13 @@ function WarningPerson() {
                 <th>Details</th>
               </tr>
             </thead>
-            {warningPerson.map((info) => (
-              <tbody>
+            <tbody>
+              {warningPerson.map((info) => (
                 <tr key={info.employeeId}>
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
-                        <div className="  h-12 w-12">
+                        <div className="h-12 w-12">
                           <img
                             src={profile}
                             alt="Avatar Tailwind CSS Component"
@@ -59,7 +59,7 @@ function WarningPerson() {
                           onClick={() => {
                             navigate(`/admin/seedetails/${info.employeeId}`);
                           }}
-                          className="hover:text-slate-400 tooltip tooltip-warning  hover:cursor-pointer"
+                          className="hover:text-slate-400 tooltip tooltip-warning hover:cursor-pointer"
                           data-tip="Show Details"
                         >
                           <div className="font-bold">
@@ -75,8 +75,8 @@ function WarningPerson() {
                     <button className="btn btn-ghost btn-xs">details</button>
                   </th>
                 </tr>
-              </tbody>
-            ))}
+              ))}
+            </tbody>
           </table>
         </div>
       </div>

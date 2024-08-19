@@ -5,7 +5,7 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const jwt = require("jsonwebtoken");
-const { auth } = require("../Middleware/Admin");
+const { auth, admin } = require("../Middleware/Admin");
 
 const prisma = new PrismaClient();
 // Create Admin
@@ -72,6 +72,24 @@ router.get("/user", auth, async (req, res) => {
   } catch (error) {
     res.status(500).send("Server Error");
     console.log(error);
+  }
+});
+
+// Middleware
+router.get("/validate", async (req, res) => {
+  const token = req.header("x-auth-token");
+  if (!token) {
+    return res.status(400).send("Token Required!");
+  }
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decode.isAdmin) {
+      return res.status(403).send("Access denied .Invalid token!");
+    }
+    res.status(200).send({ validateAdmin: true });
+  } catch (error) {
+    console.log("Error verfiy Admin token", error);
+    res.status(500).send("Server Error");
   }
 });
 function validateAdmin(admin) {

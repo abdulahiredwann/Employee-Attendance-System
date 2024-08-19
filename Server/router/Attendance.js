@@ -178,7 +178,7 @@ router.get("/yesterday", async (req, res) => {
 });
 
 // Get Warning Person
-router.get("/warning", async (req, res) => {
+router.get("/warning", [auth, admin], async (req, res) => {
   try {
     // Fetch all attendance records
     const attendanceRecords = await prisma.attendance.findMany();

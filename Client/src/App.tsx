@@ -8,6 +8,7 @@ import AnalyticsComponent from "./Components/Admin/Analytics";
 import { AuthProvider } from "./Services/Auth";
 import ShowDetails from "./Components/Admin/ShowDetails";
 import Dashboard from "./Components/Admin/Dashboard/Dashboard";
+import RegisterEmployee from "./Components/Admin/RegisterEmployee";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function AppContent() {
                   <Route path="attendance" element={<AttendanceComponent />} />
                   <Route path="analytics" element={<AnalyticsComponent />} />
                   <Route path="seedetails/:id" element={<ShowDetails />} />
+                  <Route path="register" element={<RegisterEmployee />} />
                 </Routes>
               </div>
             </div>

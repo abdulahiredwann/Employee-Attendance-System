@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 const path = require("path"); // Import the path module
 app.use("/qrcode", express.static(path.join(__dirname, "qrcode")));
+app.use(express.static("public"));
 
 const connection = mysql.createConnection({
   host: "localhost",

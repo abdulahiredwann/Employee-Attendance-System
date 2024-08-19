@@ -10,6 +10,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { auth, admin } = require("../Middleware/Admin");
 const authMiddleware = require("../Middleware/Employee");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+const { sendEmail } = require("./SendEmail");
 
 const qrcodeDir = path.join(__dirname, "../qrcode");
 if (!fs.existsSync(qrcodeDir)) {
@@ -21,7 +24,7 @@ const prisma = new PrismaClient();
 // Register Employee for admin
 router.post("/", [auth, admin], async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email } = req.body;
     const { error } = validateEmployee(req.body);
     if (error) {
       return res.status(400).send(error.details[0].message);
@@ -32,10 +35,11 @@ router.post("/", [auth, admin], async (req, res) => {
       },
     });
     if (checkEmail) {
-      return res.status(400).send("email Alredy registerd!");
+      return res.status(400).send("Email Alredy registerd!");
     }
+    const randomPassword = crypto.randomBytes(4).toString("hex");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
     // Save the file path to the database
     const newEmployee = await prisma.employee.create({
       data: {
@@ -46,7 +50,6 @@ router.post("/", [auth, admin], async (req, res) => {
         qrCode: `/qrcode/${email}.png`,
       },
     });
-    res.status(201).send(_.omit(newEmployee, ["password"]));
 
     // Generate QR code data
     const qrCodeData = `Employee:${email}-${firstName}-${lastName}-${Date.now()}-${
@@ -61,6 +64,12 @@ router.post("/", [auth, admin], async (req, res) => {
       width: 300,
       margin: 2,
     });
+    sendEmail(
+      newEmployee.email,
+      newEmployee.firstName + " " + newEmployee.lastName,
+      randomPassword
+    );
+    res.status(201).send(_.omit(newEmployee, ["password"]));
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");

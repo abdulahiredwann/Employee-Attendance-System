@@ -5,7 +5,6 @@ import { IoMdLock, IoMdMail } from "react-icons/io";
 import logo from "../../../public/ABD tech company logo.png";
 import { z } from "zod";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { CiLogin } from "react-icons/ci";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import skeleton styles
@@ -27,7 +26,6 @@ const AdminLogin: React.FC = () => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isPageLoaded, setPageLoaded] = useState<boolean>(false); // New state for page loading
 
-  const navigate = useNavigate();
   // Initialize form handling with react-hook-form and zod resolver
   const {
     reset,

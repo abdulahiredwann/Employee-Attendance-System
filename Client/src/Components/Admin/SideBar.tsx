@@ -11,6 +11,7 @@ import avater from "../../../public/profile.png";
 import logo from "../../../public/ABD tech company logo.png";
 import { useEffect, useState } from "react";
 import useValidateAdmin from "../../hooks/useValidateAdmin";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 interface User {
   firstName: string;
@@ -105,6 +106,14 @@ function SideBar() {
         </button>
         <button className="btn btn-sm btn-outline border-none flex items-center gap-2">
           <BiSupport size={20} /> Support
+        </button>
+        <button
+          onClick={() => {
+            navigate("/admin/register");
+          }}
+          className="btn btn-sm btn-outline border-none flex items-center gap-2"
+        >
+          <IoIosAddCircleOutline size={25} /> Register
         </button>
         <button
           onClick={handleLogout}

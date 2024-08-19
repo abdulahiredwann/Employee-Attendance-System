@@ -7,7 +7,6 @@ function validateEmployee(employee) {
     firstName: Joi.string().min(2).max(30).required(),
     lastName: Joi.string().min(2).max(30).required(),
     email: Joi.string().min(5).max(1000).required(),
-    password: Joi.string().min(6).max(100).required(),
   });
 
   return schema.validate(employee);

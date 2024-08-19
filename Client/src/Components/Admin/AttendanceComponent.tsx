@@ -71,25 +71,24 @@ function AttendanceComponent() {
   };
 
   const sendAttendance = async (data: EmployeeInfo) => {
+    if (isRequestPending) return; // Prevent multiple requests
+
     setIsRequestPending(true);
+    setIsScanning(false); // Disable scanning while request is pending
 
     try {
       await AttendanceService(data); // Send request to server
       toast.success("Attendance saved successfully!");
-      setIsRequestPending(false);
     } catch (error: any) {
       console.error("Error sending attendance request:", error);
       toast.error(error.response?.data || "An error occurred");
-      setIsScanning(false);
-      setIsRequestPending(false);
     } finally {
       setIsRequestPending(false);
       setTimeout(() => {
         setIsScanning(true); // Re-enable scanning after delay
-      }, 5000); // 5 seconds delay before enabling scanning again
+      }, 5000); // 5-second delay
     }
   };
-
   return (
     <div className="grid grid-cols-2 gap-4">
       <Toaster />
@@ -116,7 +115,7 @@ function AttendanceComponent() {
               <strong>ID:</strong> {employeeInfo.id}
             </p>
             <p>
-              <strong>Date:</strong> {employeeInfo.date}
+              <strong>Key:</strong> {employeeInfo.date}
             </p>
           </div>
         ) : (

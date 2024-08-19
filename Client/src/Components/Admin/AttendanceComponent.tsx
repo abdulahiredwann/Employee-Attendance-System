@@ -80,6 +80,7 @@ function AttendanceComponent() {
     } catch (error: any) {
       console.error("Error sending attendance request:", error);
       toast.error(error.response?.data || "An error occurred");
+      setIsScanning(false);
       setIsRequestPending(false);
     } finally {
       setIsRequestPending(false);

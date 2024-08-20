@@ -63,6 +63,12 @@ router.get("/get/:employeeId", async (req, res) => {
   try {
     const { employeeId } = req.params;
     const { month, year } = req.query;
+    const employee = await prisma.employee.findUnique({
+      where: { id: parseInt(employeeId) },
+    });
+    if (!employee) {
+      return res.status(400).send("Employee Not Found!");
+    }
     const attendanceRecords = await prisma.attendance.findMany({
       where: {
         employeeId: parseInt(employeeId),
@@ -203,7 +209,7 @@ router.get("/warning", [auth, admin], async (req, res) => {
       Object.keys(employeeAttendance)
         .filter((employeeId) => {
           const { late, absent } = employeeAttendance[employeeId];
-          return late >= 1 || absent >= 1;
+          return late >= 2 || absent >= 1;
         })
         .map(async (employeeId) => {
           // Fetch employee details

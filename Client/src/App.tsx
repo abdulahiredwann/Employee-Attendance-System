@@ -9,6 +9,7 @@ import { AuthProvider } from "./Services/Auth";
 import ShowDetails from "./Components/Admin/ShowDetails";
 import Dashboard from "./Components/Admin/Dashboard/Dashboard";
 import RegisterEmployee from "./Components/Admin/RegisterEmployee";
+import DashboardEmployee from "./Components/Employee/Dashboard";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<h1>Home Page</h1>} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard/:id?" element={<DashboardEmployee />} />
         <Route path="/loginadmin" element={<AdminLogin />} />
 
         {/* Admin routes */}

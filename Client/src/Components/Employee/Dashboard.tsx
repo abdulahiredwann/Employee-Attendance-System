@@ -1,3 +1,4 @@
+import CalendarComponent from "./Calander";
 import MonthlyReport from "./MonthlyReport";
 import { useParams } from "react-router-dom";
 
@@ -10,7 +11,9 @@ function DashboardEmployee() {
         <div className="">
           <MonthlyReport id={id!}></MonthlyReport>
         </div>
-        <div className="bg-green-600">Calander</div>
+        <div className="">
+          <CalendarComponent id={id!}></CalendarComponent>
+        </div>
       </div>
     </>
   );

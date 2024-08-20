@@ -3,6 +3,7 @@ import api from "../../Services/api";
 import { PieChart } from "@mui/x-charts";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { TbReportAnalytics } from "react-icons/tb";
 
 interface Props {
   id: string;
@@ -82,6 +83,12 @@ function MonthlyReport({ id }: Props) {
 
   return (
     <div>
+      <div>
+        <h1 className="text-3xl font-bold mb-4 text-gray-800 flex justify-center items-center">
+          <TbReportAnalytics color="blue"></TbReportAnalytics>
+          Monthly Report
+        </h1>
+      </div>
       <PieChart
         series={[
           {
@@ -90,9 +97,20 @@ function MonthlyReport({ id }: Props) {
                 id: 0,
                 value: count.PRESENT,
                 label: `Present:${count.PRESENT}`,
+                color: "#3b82f6 ",
               },
-              { id: 1, value: count.ABSENT, label: `Absent:${count.ABSENT}` },
-              { id: 2, value: count.LATE, label: `Late:${count.LATE}` },
+              {
+                id: 1,
+                value: count.ABSENT,
+                label: `Absent:${count.ABSENT}`,
+                color: "#EF4444",
+              },
+              {
+                id: 2,
+                value: count.LATE,
+                label: `Late:${count.LATE}`,
+                color: "#FFA500",
+              },
               { id: 3, value: daysLeft, label: "Days Left" },
             ],
             innerRadius: isMobile ? 20 : 30,

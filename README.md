@@ -44,7 +44,7 @@ cd ..
 npm run dev
 ```
 
-Usage
+## Usage
 Employee Check-In: Employees scan their QR codes to check in.
 Attendance Monitoring: The system automatically scans for absentees at 12:00 PM daily.
 Warning System: The system sends warnings to employees who have 4 absences or are late 4 times.

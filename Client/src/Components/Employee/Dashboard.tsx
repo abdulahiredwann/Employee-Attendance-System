@@ -6,8 +6,7 @@ function DashboardEmployee() {
   const { id } = useParams();
   return (
     <>
-      <h1>Welcome to Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-4">
         <div className="">
           <MonthlyReport id={id!}></MonthlyReport>
         </div>

@@ -209,7 +209,7 @@ router.get("/warning", [auth, admin], async (req, res) => {
       Object.keys(employeeAttendance)
         .filter((employeeId) => {
           const { late, absent } = employeeAttendance[employeeId];
-          return late >= 2 || absent >= 1;
+          return late >= 3 || absent >= 5;
         })
         .map(async (employeeId) => {
           // Fetch employee details
